@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Empiricompany_Attributearray>
+            <codePool>local</codePool>
+            <active>true</active>
+            <depends>
+                <Mage_Catalog />
+                <Mage_Adminhtml />
+            </depends>
+        </Empiricompany_Attributearray>
+    </modules>
+</config>

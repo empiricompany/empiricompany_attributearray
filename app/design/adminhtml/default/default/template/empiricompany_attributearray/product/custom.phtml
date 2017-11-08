@@ -1,0 +1,70 @@
+<?php
+$_htmlId = $this->getElement()->getHtmlId();
+$_htmlClass = $this->getElement()->getClass();
+$_htmlName = $this->getElement()->getName();
+$_readonly = $this->getElement()->getReadonly();
+$value = $this->getElement()->getValue();
+
+?>
+<script type="text/javascript">
+    document.observe('dom:loaded', function() {
+        var buttons = $$('.removeButton');
+        buttons.each(function(w) {
+            w.observe('click', function(e) {
+                this.up('tr').remove();
+            });
+        });
+        var buttons = $$('.addButton');
+        buttons.each(function(w) {
+            w.observe('click', function(e) {
+                var numrows = $$('#<?php echo $_htmlId; ?>_container tr').length;
+                $('<?php echo $_htmlId; ?>_container').down('tr:last-child').insert({after:'<tr><td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>['+numrows+'][1]" value=""<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>> </td><td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>['+numrows+'][2]" value=""<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>></td><!--td><input class="removeButton" type="button" value="elimina"></td--></tr>'});
+            });
+        });
+    });
+</script>
+<tr> <!-- should be wrapped in a tr element to fit in the admin template -->
+    <td class="label">
+        <label><?php echo $this->getElement()->getLabel(); ?></label>
+        
+    </td>
+    <td colspan="10" class="grid tier">
+        <table cellspacing="0" class="data border dynamic-grid">
+            <colgroup>
+                <col width="50" />
+                <col width="50" />
+            </colgroup>
+            <thead>
+                <tr class="headings">
+                    <th><?php echo $this->__('Label')?></th>
+                    <th class="last"><?php echo $this->__('Value')?></th>
+                </tr>
+            </thead>
+            <tbody id="<?php echo $_htmlId; ?>_container">
+            <?php foreach ($value as $key=>$row) : ?>
+                
+            <tr>
+                <td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>[<?php echo $key; ?>][1]" value="<?php echo $row[1];?>"<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>> </td>
+                <td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>[<?php echo $key; ?>][2]" value="<?php echo $row[2];?>"<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>></td>
+                <!--td><input class="removeButton" type="button" value="elimina"></td-->
+            </tr>
+            <?php endforeach; ?>
+            <?php if(count($value)<=0) : ?>
+                <tr>
+                    <td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>[0][1]" value=""<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>> </td>
+                    <td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>[0][2]" value=""<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>></td>
+                    <!--td><input class="removeButton" type="button" value="elimina"></td-->
+                </tr>
+            <?php endif; ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                <td colspan="4" class="a-right">
+                    <button style="" onclick="" class="scalable add addButton" type="button" id="addToEndBtn<?php echo $_htmlId ?>"><span><span><span><?php echo $this->__('Aggiungi nuova riga'); ?></span></span></span></button>
+                </td></tr>
+                
+                
+            </tfoot>
+        </table>
+    </td>
+</tr>
