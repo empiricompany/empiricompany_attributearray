@@ -49,7 +49,7 @@ $value = $this->getElement()->getValue();
                 <!--td><input class="removeButton" type="button" value="elimina"></td-->
             </tr>
             <?php endforeach; ?>
-            <?php if(count($value)<=0) : ?>
+            <?php if(count($value)<=0 || empty($value)) : ?>
                 <tr>
                     <td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>[0][1]" value=""<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>> </td>
                     <td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>[0][2]" value=""<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>></td>
