@@ -2,9 +2,9 @@
 
 ![Demo](https://user-images.githubusercontent.com/5071467/32602668-435e0e32-c547-11e7-9e6e-f490b83bbcc2.gif)
 
-This module extension adds a new special attribute to products named "attributearray" and create an additional tab named "Additional Details" then add it to "Default" attribute set.
+This module extension adds a new special attribute to products named "attributearray" and creates an additional tab named "Additional Details" then adds it to "Default" attribute set.
 In magento backend, when you edit the product, you can add rows to a dynamic table like label => value.
-When you save the product it's store a serialized value and when you retrive on frontend you have an array that you can print indipendently from the template, for example as an html table.
+When you save the product it stores a serialized value and when you retrive on frontend you have an array that you can print indipendently from the template, for example as an html table.
 
 This allow you to store complex data in structured values that you can print as you can want indipendently from templates instead of create html code, of a table for example.
 
