@@ -30,6 +30,15 @@
             </attributearray>
         </helpers>
     </global>
+    <frontend>
+        <layout>
+            <updates>
+                <empiricompany_attributearray>
+                    <file>empiricompany_attributearray.xml</file>
+                </empiricompany_attributearray>
+            </updates>
+        </layout>
+    </frontend>
     <adminhtml>
         <events>
             <adminhtml_catalog_product_edit_prepare_form>

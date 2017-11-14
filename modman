@@ -1,3 +1,5 @@
 app/code/local/* app/code/local/
+app/design/frontend/base/default/layout/* app/design/frontend/base/default/layout/
+app/design/frontend/base/default/template/* app/design/frontend/base/default/template/
 app/design/adminhtml/default/default/template/* app/design/adminhtml/default/default/template/
 app/etc/modules/Empiricompany_Attributearray.xml app/etc/modules/Empiricompany_Attributearray.xml

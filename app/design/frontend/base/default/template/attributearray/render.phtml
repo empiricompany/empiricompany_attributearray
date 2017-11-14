@@ -1,0 +1,14 @@
+<?php
+$arrayValues = $this->getProduct()->getAttributearray();
+if(is_array($arrayValues)){
+    echo '<strong>Additional details</strong><br />';
+    echo '<table width="400" border="1">';
+    foreach ($arrayValues as $key => $value) {
+        if(empty($value[1]) || empty($value[2])){
+            echo '<tr><td colspan="2">'.$value[1].$value[2].'</td></tr>';
+        }else{
+            echo '<tr><td>'.$value[1].'</td><td>'.$value[2].'</td></tr>';
+        }
+    }
+    echo '</table>';
+}
