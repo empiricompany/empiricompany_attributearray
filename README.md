@@ -1,6 +1,6 @@
 # Magento Product Attribute Table
 
-![Demo](https://user-images.githubusercontent.com/5071467/32602668-435e0e32-c547-11e7-9e6e-f490b83bbcc2.gif)
+![Demo](https://user-images.githubusercontent.com/5071467/32837692-c0a960be-ca0e-11e7-8103-95e6c7ad75c0.gif)
 
 This module extension adds a new special attribute to products named "attributearray" and creates an additional tab named "Additional Details" then adds it to "Default" attribute set.
 In magento backend, when you edit the product, you can add rows to a dynamic table like label => value.
