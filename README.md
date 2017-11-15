@@ -1,6 +1,7 @@
 # Magento Product Attribute Table
 
 ![Demo](https://user-images.githubusercontent.com/5071467/32837692-c0a960be-ca0e-11e7-8103-95e6c7ad75c0.gif)
+![Demo](https://user-images.githubusercontent.com/5071467/32777303-efcf3e88-c935-11e7-91e4-46793c130458.png)
 
 This module extension adds a new special attribute to products named "attributearray" and creates an additional tab named "Additional Details" then adds it to "Default" attribute set.
 In magento backend, when you edit the product, you can add rows to a dynamic table like label => value.
@@ -15,16 +16,3 @@ Modman install
 modman clone https://github.com/empiricompany/empiricompany_attributearray.git
 ```
 
-To print in frontend side you can retrive its value as an array then you can iterate it to print an html table, for example:
-```php
-$arrayValues = $_product->getAttributearray();
-if(is_array($arrayValues)){
-    echo '<strong>Additional details</strong><br />';
-    echo '<table width="400" border="1">';
-    foreach ($arrayValues as $key => $value) { 
-        echo '<tr><td>'.$value[1].'</td><td>'.$value[2].'</td></tr>';
-    }
-    echo '</table>';
-}
-
-```
