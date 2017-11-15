@@ -6,66 +6,136 @@ $_readonly = $this->getElement()->getReadonly();
 $value = $this->getElement()->getValue();
 
 ?>
-<script type="text/javascript">
-    document.observe('dom:loaded', function() {
-        var buttons = $$('.removeButton');
-        buttons.each(function(w) {
-            w.observe('click', function(e) {
-                this.up('tr').remove();
-            });
-        });
-        var buttons = $$('.addButton');
-        buttons.each(function(w) {
-            w.observe('click', function(e) {
-                var numrows = $$('#<?php echo $_htmlId; ?>_container tr').length;
-                $('<?php echo $_htmlId; ?>_container').down('tr:last-child').insert({after:'<tr><td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>['+numrows+'][1]" value=""<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>> </td><td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>['+numrows+'][2]" value=""<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>></td><!--td><input class="removeButton" type="button" value="elimina"></td--></tr>'});
-            });
-        });
-    });
-</script>
 <tr> <!-- should be wrapped in a tr element to fit in the admin template -->
     <td class="label">
         <label><?php echo $this->getElement()->getLabel(); ?></label>
         
     </td>
-    <td colspan="10" class="grid tier">
-        <table cellspacing="0" class="data border dynamic-grid">
-            <colgroup>
-                <col width="50" />
-                <col width="50" />
-            </colgroup>
-            <thead>
-                <tr class="headings">
-                    <th><?php echo $this->__('Label')?></th>
-                    <th class="last"><?php echo $this->__('Value')?></th>
-                </tr>
-            </thead>
-            <tbody id="<?php echo $_htmlId; ?>_container">
-            <?php foreach ($value as $key=>$row) : ?>
-                
-            <tr>
-                <td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>[<?php echo $key; ?>][1]" value="<?php echo $row[1];?>"<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>> </td>
-                <td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>[<?php echo $key; ?>][2]" value="<?php echo $row[2];?>"<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>></td>
-                <!--td><input class="removeButton" type="button" value="elimina"></td-->
+    <td colspan="10" class="grid ">
+        <table class="data border dynamic-grid" cellspacing="0"  cellpadding="0">
+            <tr id="attribute-options-table" class="headings">
+                <th><?php echo $this->__('Label')?></th>
+                <th class="last"><?php echo $this->__('Value')?></th>
+                <th>
+                    <?php if (!$this->getReadOnly()):?>
+                        <button id="add_new_option_button" title="<?php echo $this->__('Add'); ?>" type="button" class="scalable add" onclick="" style=""><span><span><span><?php echo $this->__('Add'); ?></span></span></span></button>
+                    <?php endif;?>
+                </th>
             </tr>
-            <?php endforeach; ?>
-
-            <?php if(count($value)<=0 || empty($value)) : ?>
-                <tr>
-                    <td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>[0][1]" value=""<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>> </td>
-                    <td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>[0][2]" value=""<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>></td>
-                    <!--td><input class="removeButton" type="button" value="elimina"></td-->
-                </tr>
-            <?php endif; ?>
-            </tbody>
-            <tfoot>
-                <tr>
-                <td colspan="4" class="a-right">
-                    <button style="" onclick="" class="scalable add addButton" type="button" id="addToEndBtn<?php echo $_htmlId ?>"><span><span><span><?php echo $this->__('Aggiungi nuova riga'); ?></span></span></span></button>
-                </td></tr>
-                
-                
-            </tfoot>
         </table>
     </td>
 </tr>
+
+<script type="text/javascript">
+//<![CDATA[
+var optionDefaultInputType = 'radio';
+
+// IE removes quotes from element.innerHTML whenever it thinks they're not needed, which breaks html.
+var templateText =
+        '<tr>' +
+            '<td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>[{{id}}][1]" value="{{1}}"<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>> </td>' +
+            '<td><input class="input-text" type="text" name="<?php echo $_htmlName; ?>[{{id}}][2]" value="{{2}}"<?php echo ($_readonly) ? ' readonly="readonly"' : ''?>></td>' +
+            '<td class="a-left" id="delete_button_container_option_{{id}}"><input class="scalable delete icon-btn delete-product-option" name="option[delete][option_{{id}}]" value="" type="hidden"><button id="id_<?php echo $_htmlName; ?>" title="<?php echo $this->__('Remove'); ?>" type="button" class="scalable delete delete-option" onclick="" style=""><span><span><span><?php echo $this->__('Remove'); ?></span></span></span></button></td>' +
+        '</tr>';
+
+var attributeOption = {
+    //table : $('attribute-options-table').up('table').down('tr:last-child'),
+    table : $('attribute-options-table'),
+    templateSyntax : /(^|.|\r|\n)({{(\w+)}})/,
+    templateText : templateText,
+    itemCount : 1,
+    totalItems : 0,
+    isReadOnly: <?php echo (int)$this->getReadOnly(); ?>,
+    add : function(data) {
+        this.template = new Template(this.templateText, this.templateSyntax);
+        var isNewOption = false;
+        if(!data.id){
+            data = {};
+            data.id  = this.itemCount;
+            isNewOption = true;
+        }
+        if (!data.intype)
+            data.intype = optionDefaultInputType;
+        console.log($('attribute-options-table').up('table').down('tr:last-child'));
+        $(this.table).up('table').down('tr:last-child').insert({after: this.template.evaluate(data)});
+        //console.log(data);
+        //console.log(this.template.evaluate(data));
+        //Element.insert(this.table, {after: this.template.evaluate(data)});
+        if (isNewOption && !this.isReadOnly) {
+            this.enableNewOptionDeleteButton(data.id);
+        }
+        this.bindRemoveButtons();
+        this.itemCount++;
+        this.totalItems++;
+    },
+    remove : function(event){
+        var element = $(Event.findElement(event, 'tr')); // !!! Button already
+                                                               // have table parent in safari
+        // Safari workaround
+        element.ancestors().each(function(parentItem){
+           if (parentItem.hasClassName('option-row')) {
+               element = parentItem;
+               throw $break;
+           } else if (parentItem.hasClassName('box')) {
+               throw $break;
+           }
+        });
+
+
+        if(element){
+            var elementFlags = element.getElementsByClassName('delete-flag');
+            if(elementFlags[0]){
+                elementFlags[0].value=1;
+            }
+
+            element.addClassName('no-display');
+            element.addClassName('template');
+            element.hide();
+            element.remove();
+            this.totalItems--;
+        }
+    },
+    enableNewOptionDeleteButton: function(id) {
+        $$('#delete_button_container_' + id + ' button').each(function(button) {
+            button.enable();
+            button.removeClassName('disabled');
+        });
+    },
+    bindRemoveButtons : function(){
+        var buttons = $$('.delete-option');
+        for(var i=0;i<buttons.length;i++){
+            if(!$(buttons[i]).binded){
+                $(buttons[i]).binded = true;
+                Event.observe(buttons[i], 'click', this.remove.bind(this));
+            }
+        }
+    }
+
+}
+if($('row-template')){
+    $('row-template').remove();
+}
+attributeOption.bindRemoveButtons();
+
+if($('add_new_option_button')){
+    Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption));
+}
+Validation.addAllThese([
+    ['required-option', '<?php echo Mage::helper('core')->jsQuoteEscape(Mage::helper('catalog')->__('Failed')) ?>', function(v) {
+        return !Validation.get('IsEmpty').test(v);
+}]]);
+Validation.addAllThese([
+    ['required-options-count', '<?php echo Mage::helper('core')->jsQuoteEscape(Mage::helper('catalog')->__('Options is required')) ?>', function(v) {
+        return !Validation.get('IsEmpty').test(v);
+}]]);
+<?php
+    $_values = $this->getElement()->getValue();
+    $_countItems = 1;
+    if(is_array($_values)) : ksort($_values); ?>
+    <?php foreach ($_values as $_key => $_value): ?>
+        <?php $_value['id'] = $_countItems; $_countItems++; ?>
+        attributeOption.add(<?php echo json_encode($_value) ?>);
+    <?php endforeach; ?>
+    <?php endif; ?>
+//]]>
+</script>

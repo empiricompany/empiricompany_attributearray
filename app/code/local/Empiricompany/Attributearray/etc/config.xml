@@ -50,5 +50,14 @@
                 </observers>
             </adminhtml_catalog_product_edit_prepare_form>
         </events>
+        <translate>
+            <modules>
+                <Empiricompany_Attributearray>
+                    <files>
+                        <default>Empiricompany_Attributearray.csv</default>
+                    </files>
+                </Empiricompany_Attributearray>
+            </modules>
+        </translate>
     </adminhtml>
 </config>
