@@ -24,3 +24,8 @@ Modman install
 modman clone https://github.com/empiricompany/empiricompany_attributearray.git
 ```
 
+For a clean uninstall you have to update attribute to user_defined
+```
+UPDATE `eav_attribute` SET is_user_defined = 1 WHERE attribute_code = 'attributearray';
+```
+then you can remove it from magento backend.
