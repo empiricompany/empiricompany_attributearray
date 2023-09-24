@@ -1,4 +1,4 @@
-# Magento Product Attribute Table
+# OpenMage / Magento 1.9  Product Attribute Table
 Backend<br>
 ![Demo](https://user-images.githubusercontent.com/5071467/32837692-c0a960be-ca0e-11e7-8103-95e6c7ad75c0.gif)
 Frontend<br>
